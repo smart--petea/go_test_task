@@ -17,25 +17,33 @@ func main() {
         log.Fatal("Error loading .env file")
     }
 
-    POSTGRES_HOST := os.Getenv("POSTGRES_HOST")
-    POSTGRES_PORT := os.Getenv("POSTGRES_PORT")
-    POSTGRES_USER := os.Getenv("POSTGRES_USER")
-    POSTGRES_DB := os.Getenv("POSTGRES_DB")
-    POSTGRES_PASSWORD := os.Getenv("POSTGRES_PASSWORD")
-    POSTGRES_SSLMODE := os.Getenv("POSTGRES_SSLMODE")
-    postgresUrl := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=%s", POSTGRES_HOST, POSTGRES_PORT, POSTGRES_USER, POSTGRES_DB, POSTGRES_PASSWORD, POSTGRES_SSLMODE)
-    log.Printf("Try to connect to postgres: %s", postgresUrl)
-    _, err = gorm.Open("postgres", postgresUrl)
-    if err != nil {
-        log.Fatal(err)
-    }
+    connectPostgres()
 
     http.HandleFunc("/bar", func(w http.ResponseWriter, r *http.Request) {
         fmt.Fprintf(w, "Hello, %q", html.EscapeString(r.URL.Path))
     })
 
     serverPort := os.Getenv("SERVER_PORT")
-    serverUrl := fmt.Sprintf(":%s", serverPort)
-    log.Printf("Starting server on address %s", serverUrl)
+    serverUrl := fmt.Sprintf("127.0.0.1:%s", serverPort)
+    log.Printf("Server started at %s", serverUrl)
     log.Fatal(http.ListenAndServe(serverUrl, nil))
+}
+
+func connectPostgres() {
+    postgresUrl := fmt.Sprintf(
+        "host=%s port=%s user=%s dbname=%s password=%s sslmode=%s",
+        os.Getenv("POSTGRES_HOST"),
+        os.Getenv("POSTGRES_PORT"),
+        os.Getenv("POSTGRES_USER"),
+        os.Getenv("POSTGRES_DB"),
+        os.Getenv("POSTGRES_PASSWORD"),
+        os.Getenv("POSTGRES_SSLMODE"),
+    )
+
+    log.Printf("Connecting to postgres...")
+    _, err := gorm.Open("postgres", postgresUrl)
+    if err != nil {
+        log.Fatal(err)
+    }
+    log.Printf("Connected to postgres")
 }
