@@ -17,7 +17,12 @@ func main() {
         log.Fatal("Error loading .env file")
     }
 
-    connectPostgres()
+    db, err := connectPostgres()
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    gormAutoMigrate(db)
 
     http.HandleFunc("/bar", func(w http.ResponseWriter, r *http.Request) {
         fmt.Fprintf(w, "Hello, %q", html.EscapeString(r.URL.Path))
@@ -29,7 +34,7 @@ func main() {
     log.Fatal(http.ListenAndServe(serverUrl, nil))
 }
 
-func connectPostgres() {
+func connectPostgres() (db *gorm.DB, err error) {
     postgresUrl := fmt.Sprintf(
         "host=%s port=%s user=%s dbname=%s password=%s sslmode=%s",
         os.Getenv("POSTGRES_HOST"),
@@ -41,9 +46,20 @@ func connectPostgres() {
     )
 
     log.Printf("Connecting to postgres...")
-    _, err := gorm.Open("postgres", postgresUrl)
+    db, err = gorm.Open("postgres", postgresUrl)
     if err != nil {
-        log.Fatal(err)
+        return nil, err
     }
     log.Printf("Connected to postgres")
+
+    return db, nil
+}
+
+type Category struct {
+    gorm.Model
+    Name string
+}
+
+func gormAutoMigrate(db *gorm.DB) {
+    db.AutoMigrate(&Category{})
 }
