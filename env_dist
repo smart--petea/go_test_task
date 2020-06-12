@@ -1,1 +1,8 @@
 SERVER_PORT=8080
+
+POSTGRES_HOST=postgres host
+POSTGRES_PORT=postgres port
+POSTGRES_USER=postgres user
+POSTGRES_DB=postgres dbname
+POSTGRES_PASSWORD=postgres password
+POSTGRES_SSLMODE=enable
