@@ -6,5 +6,5 @@ import (
 
 type Category struct {
     gorm.Model
-    Name string `gorm:"type:varchar(100)":unique_index json:"name"`
+    Name string `gorm:"type:varchar(100);unique_index" json:"name"`
 }
