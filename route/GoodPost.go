@@ -55,23 +55,26 @@ func (*GoodPost) Run(
         return
     }
 
-    priceFloat, err := strconv.ParseFloat(price.(string), 32)
+    priceS := fmt.Sprintf("%v", price)
+    priceFloat, err := strconv.ParseFloat(priceS, 32)
     if err != nil {
-        log.Println("Price is not of float type")
-        http.Error(w, "Price is not of float type", http.StatusBadRequest)
+        log.Println("Price could not be converted to float type")
+        http.Error(w, "Price could not be converted to float type", http.StatusBadRequest)
         return
     }
 
-    good.Price = priceFloat
+    good.Price = float32(priceFloat)
 
-    categoryIds, ok := obj["categories"]
+    categoryIdsArray, ok := obj["categories"]
     if !ok {
         log.Println("Categories not provided")
         http.Error(w, "Categories not provided", http.StatusBadRequest)
         return
     }
 
-    for _, categoryId := range categoryIds.([]interface{}) {
+
+    categories := ""
+    for _, categoryId := range categoryIdsArray.([]interface{}) {
         var category entity.Category
         db.Where("id = ?", categoryId).First(&category)
         if category.ID == 0 {
@@ -81,8 +84,9 @@ func (*GoodPost) Run(
             return
         }
 
-        good.Categories = append(good.Categories, category)
+        categories = categories + "," + strconv.Itoa(int(category.ID))
     }
+    good.Categories = categories[1:]
 
     log.Println(good)
     err = db.Create(&good).Error
