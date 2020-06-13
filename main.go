@@ -50,6 +50,9 @@ func runServer(db *gorm.DB) error {
     routing[http.MethodGet][categoryRegex] = &route.CategoryGetAll{}
     routing[http.MethodPost][categoryRegex] = &route.CategoryPost{}
 
+    categoryIdRegex := regexp.MustCompile(`^/category/(?P<id>\d+)$`)
+    routing[http.MethodPut][categoryIdRegex] = &route.CategoryPut{}
+
     http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
         log.Printf("%s %s", r.Method, r.URL.Path)
         _, ok := routing[r.Method]

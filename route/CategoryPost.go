@@ -12,7 +12,7 @@ type CategoryPost struct {}
 func (*CategoryPost) Run(
     w http.ResponseWriter,
     r *http.Request,
-    urlMatches map[string]string,
+    params map[string]string,
     db *gorm.DB,
 ) {
     if r.Body == nil {

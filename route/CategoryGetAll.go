@@ -11,7 +11,7 @@ type CategoryGetAll struct {}
 func (*CategoryGetAll) Run(
     w http.ResponseWriter,
     r *http.Request,
-    urlMatches map[string]string,
+    params map[string]string,
     db *gorm.DB,
 ) {
     categories := []entity.Category{}
