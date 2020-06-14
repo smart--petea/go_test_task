@@ -28,7 +28,7 @@ func (GoodGetOne) Run(
     goodJson, err := json.Marshal(good)
     if err != nil {
         log.Println("Error: ", err)
-        http.Error(w, err.Error(), 400)
+        http.Error(w, err.Error(), http.StatusBadRequest)
         return
     }
  

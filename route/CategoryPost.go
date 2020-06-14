@@ -17,7 +17,7 @@ func (CategoryPost) Run(
     db *gorm.DB,
 ) {
     if r.Body == nil {
-        http.Error(w, "Please send a request body", 400)
+        http.Error(w, "Please send a request body", http.StatusBadRequest)
         log.Println("Empty body")
         return
     }
@@ -26,21 +26,21 @@ func (CategoryPost) Run(
     err := json.NewDecoder(r.Body).Decode(&category)
     if err != nil {
         log.Println("Error: ", err)
-        http.Error(w, err.Error(), 400)
+        http.Error(w, err.Error(), http.StatusBadRequest)
         return
     }
 
     err = db.Create(&category).Error
     if err != nil {
         log.Println("Error: ", err)
-        http.Error(w, err.Error(), 400)
+        http.Error(w, err.Error(), http.StatusBadRequest)
         return
     }
 
     categoryJson, err := json.Marshal(category)
     if err != nil {
         log.Println("Error: ", err)
-        http.Error(w, err.Error(), 400)
+        http.Error(w, err.Error(), http.StatusBadRequest)
         return
     }
 

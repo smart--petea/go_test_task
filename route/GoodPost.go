@@ -19,7 +19,7 @@ func (GoodPost) Run(
     db *gorm.DB,
 ) {
     if r.Body == nil {
-        http.Error(w, "Please send a request body", 400)
+        http.Error(w, "Please send a request body", http.StatusBadRequest)
         log.Println("Empty body")
         return
     }
@@ -93,14 +93,14 @@ func (GoodPost) Run(
     err = db.Create(&good).Error
     if err != nil {
         log.Println("Error: ", err)
-        http.Error(w, err.Error(), 400)
+        http.Error(w, err.Error(), http.StatusBadRequest)
         return
     }
 
     goodJson, err := json.Marshal(good)
     if err != nil {
         log.Println("Error: ", err)
-        http.Error(w, err.Error(), 400)
+        http.Error(w, err.Error(), http.StatusBadRequest)
         return
     }
 

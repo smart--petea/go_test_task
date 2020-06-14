@@ -51,7 +51,7 @@ func (CategoryPut) Run(
     categoryJson, err := json.Marshal(category)
     if err != nil {
         log.Println("Error: ", err)
-        http.Error(w, err.Error(), 400)
+        http.Error(w, err.Error(), http.StatusBadRequest)
         return
     }
  

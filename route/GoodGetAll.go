@@ -5,6 +5,7 @@ import (
     "github.com/jinzhu/gorm"
     "github.com/smart--petea/go_test_task/entity"
     "encoding/json"
+    "log"
 )
 
 type GoodGetAll struct {}
@@ -20,8 +21,8 @@ func (GoodGetAll) Run(
 
     obj, err := json.Marshal(goods)
     if err != nil {
-        //add log
-        http.Error(w, "error at json marshalling", 500)
+        log.Println(err)
+        http.Error(w, "error at json marshalling", http.StatusInternalServerError)
         return
     } else {
         w.Write(obj)
