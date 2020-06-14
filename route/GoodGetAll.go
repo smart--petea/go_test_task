@@ -8,7 +8,8 @@ import (
 )
 
 type GoodGetAll struct {}
-func (*GoodGetAll) Run(
+
+func (GoodGetAll) Run(
     w http.ResponseWriter,
     r *http.Request,
     params map[string]string,

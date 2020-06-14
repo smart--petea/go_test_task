@@ -11,7 +11,8 @@ import (
 )
 
 type GoodPost struct {}
-func (*GoodPost) Run(
+
+func (GoodPost) Run(
     w http.ResponseWriter,
     r *http.Request,
     params map[string]string,

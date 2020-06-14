@@ -9,7 +9,8 @@ import (
 )
 
 type CategoryPost struct {}
-func (*CategoryPost) Run(
+
+func (CategoryPost) Run(
     w http.ResponseWriter,
     r *http.Request,
     params map[string]string,

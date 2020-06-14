@@ -8,7 +8,8 @@ import (
 )
 
 type CategoryGetAll struct {}
-func (*CategoryGetAll) Run(
+
+func (CategoryGetAll) Run(
     w http.ResponseWriter,
     r *http.Request,
     params map[string]string,

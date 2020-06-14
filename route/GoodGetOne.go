@@ -9,7 +9,8 @@ import (
 )
 
 type GoodGetOne struct {}
-func (*GoodGetOne) Run(
+
+func (GoodGetOne) Run(
     w http.ResponseWriter,
     r *http.Request,
     params map[string]string,

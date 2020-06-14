@@ -9,7 +9,8 @@ import (
 )
 
 type CategoryGetOne struct {}
-func (*CategoryGetOne) Run(
+
+func (CategoryGetOne) Run(
     w http.ResponseWriter,
     r *http.Request,
     params map[string]string,
