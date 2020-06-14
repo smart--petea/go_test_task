@@ -44,7 +44,6 @@ func runServer(db *gorm.DB) error {
     routing[http.MethodGet] = make(map[*regexp.Regexp] route.RoutingEntryInterface)
     routing[http.MethodPut] = make(map[*regexp.Regexp] route.RoutingEntryInterface)
     routing[http.MethodPost] = make(map[*regexp.Regexp] route.RoutingEntryInterface)
-    routing[http.MethodDelete] = make(map[*regexp.Regexp] route.RoutingEntryInterface)
 
     categoryRegex := regexp.MustCompile(`^/category$`)
     routing[http.MethodGet][categoryRegex] = &route.CategoryGetAll{}
@@ -57,6 +56,10 @@ func runServer(db *gorm.DB) error {
     goodRegex := regexp.MustCompile(`^/good$`)
     routing[http.MethodGet][goodRegex] = &route.GoodGetAll{}
     routing[http.MethodPost][goodRegex] = &route.GoodPost{}
+
+    goodIdRegex := regexp.MustCompile(`^/good/(?P<id>\d+)$`)
+    routing[http.MethodGet][goodIdRegex] = &route.GoodGetOne{}
+    routing[http.MethodPut][goodIdRegex] = &route.GoodPut{}
 
     http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
         log.Printf("%s %s", r.Method, r.URL.Path)
