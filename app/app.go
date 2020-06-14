@@ -48,7 +48,7 @@ func (app *App) runServer() error {
         log.Printf("%s %s", r.Method, r.URL.Path)
         _, ok := app.routeTable[r.Method]
         if !ok {
-            http.Error(w, "Not a supported http method", 500)
+            http.Error(w, "Not a supported http method", http.StatusInternalServerError)
             return 
         }
 
@@ -69,7 +69,7 @@ func (app *App) runServer() error {
             return
         }
 
-        http.Error(w, "no suitable route found", 400)
+        http.Error(w, "no suitable route found", http.StatusBadRequest)
     })
 
     return http.ListenAndServe(serverUrl, nil)
